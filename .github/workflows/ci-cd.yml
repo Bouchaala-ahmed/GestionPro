@@ -30,7 +30,7 @@ jobs:
       - name: Publish
         run: dotnet publish -c Release -o ./publish
 
-  docker:
+  docker: 
     needs: build
     runs-on: ubuntu-latest 
     
