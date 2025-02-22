@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GestionProAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e0c2e5dc9b60b158b09067711bb606e7c2bf6785")]
 [assembly: System.Reflection.AssemblyProductAttribute("GestionProAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GestionProAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
