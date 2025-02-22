@@ -43,5 +43,5 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t your-docker-username/gestionpro-api:latest .
-          docker push your-docker-username/gestionpro-api:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/gestionpro-api:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/gestionpro-api:latest
