@@ -3,43 +3,72 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// 1. Configuration PORT pour Railway (ESSENTIEL)
+builder.WebHost.UseUrls($"http://0.0.0.0:{Environment.GetEnvironmentVariable("PORT") ?? "5000"}");
+
+// 2. Configuration Database avec résilience
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlOptions => sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(30),
+            errorNumbersToAdd: null)
+    ));
 
-builder.Services.AddControllers();
-
-// Add CORS configuration
+// 3. CORS Sécurisé (Adaptez les origines)
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularApp", builder =>
+    options.AddPolicy("AllowedOrigins", builder =>
     {
-        builder.WithOrigins("http://localhost:4200") // Replace with your Angular app's URL
-               .AllowAnyMethod()                    // Allow all HTTP methods
-               .AllowAnyHeader();                   // Allow all headers
+        builder.WithOrigins(
+                "http://localhost:4200",  // Dev Angular
+                "https://votre-front.netlify.app"  // Production
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// 4. Swagger configuré pour Production
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "GestionPro API", Version = "v1" });
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// 5. Gestion des Migrations Automatisée
+await using (var scope = app.Services.CreateAsyncScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await db.Database.MigrateAsync();
 }
 
-// Enable CORS middleware
-app.UseCors("AllowAngularApp");
+// 6. Pipeline de Requêtes
+app.UseCors("AllowedOrigins");
+
+if (!app.Environment.IsEnvironment("Test")) // Swagger sauf en environnement Test
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "GestionPro API v1");
+        c.RoutePrefix = "api-docs";  // Sécurisé
+    });
+}
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
-app.Run();
+// 7. Gestion d'Erreurs Globale (PROD)
+if (app.Environment.IsProduction())
+{
+    app.UseExceptionHandler("/error");
+    app.Logger.LogInformation("Mode Production activé");
+}
+
+await app.RunAsync();

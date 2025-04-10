@@ -4438,11 +4438,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Admin\\OneDrive\\Bureau\\GestionProAPI\\GestionProAPI\\GestionProAPI.csproj",
+      "projectUniqueName": "C:\\Users\\Admin\\OneDrive\\Bureau\\GestionPro\\GestionProAPI\\GestionProAPI\\GestionProAPI.csproj",
       "projectName": "GestionProAPI",
-      "projectPath": "C:\\Users\\Admin\\OneDrive\\Bureau\\GestionProAPI\\GestionProAPI\\GestionProAPI.csproj",
+      "projectPath": "C:\\Users\\Admin\\OneDrive\\Bureau\\GestionPro\\GestionProAPI\\GestionProAPI\\GestionProAPI.csproj",
       "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Admin\\OneDrive\\Bureau\\GestionProAPI\\GestionProAPI\\obj\\",
+      "outputPath": "C:\\Users\\Admin\\OneDrive\\Bureau\\GestionPro\\GestionProAPI\\GestionProAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
