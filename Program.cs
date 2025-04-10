@@ -2,6 +2,8 @@ using GestionProAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+// Add this line to automatically use Railway's port
+builder.WebHost.UseUrls($"http://0.0.0.0:{Environment.GetEnvironmentVariable("PORT") ?? "5000"}");
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
